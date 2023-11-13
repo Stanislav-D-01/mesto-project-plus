@@ -6,23 +6,53 @@ export const createUser = (req: Request, res: Response) => {
   const { name, about, avatar } = req.body;
   return user
     .create({ name, about, avatar })
-    .then((user) => res.send(user))
+    .then((user) =>
+      res.send({
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        _id: user._id,
+      }),
+    )
     .catch((error) => errorsHandler(error, res));
 };
 
 export const getAllUsers = (req: Request, res: Response) => {
   return user
     .find({})
-    .then((users) => res.send(users))
+    .then((users) =>
+      res.send(
+        users.map((user) => {
+          return {
+            name: user.name,
+            about: user.about,
+            avatar: user.avatar,
+            _id: user._id,
+          };
+        }),
+      ),
+    )
+
     .catch((error) => errorsHandler(error, res));
 };
 
 export const getUserFromId = (req: Request, res: Response) => {
   const { id } = req.params;
-  return user
-    .findById(id)
-    .then((user) => res.send(user))
-    .catch((error) => errorsHandler(error, res));
+  if (id) {
+    return user
+      .findById(id)
+      .then((user) => {
+        if (user) {
+          res.send({
+            name: user.name,
+            about: user.about,
+            avatar: user.avatar,
+            _id: user._id,
+          });
+        }
+      })
+      .catch((error) => errorsHandler(error, res));
+  }
 };
 
 export const updateProfile = (req: Request, res: Response) => {
@@ -30,7 +60,16 @@ export const updateProfile = (req: Request, res: Response) => {
   const id = req.body.user._id;
   return user
     .findByIdAndUpdate(id, { name, about }, { new: true })
-    .then((user) => res.send(user))
+    .then((user) => {
+      if (user) {
+        res.send({
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+          _id: user._id,
+        });
+      }
+    })
     .catch((error) => errorsHandler(error, res));
 };
 
@@ -40,6 +79,15 @@ export const updateAvatar = (req: Request, res: Response) => {
 
   return user
     .findByIdAndUpdate(id, { avatar }, { new: true })
-    .then((user) => res.send(user))
+    .then((user) => {
+      if (user) {
+        res.send({
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+          _id: user._id,
+        });
+      }
+    })
     .catch((error) => errorsHandler(error, res));
 };

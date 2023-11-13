@@ -23,8 +23,8 @@ export const deleteCard = (req: Request, res: Response) => {
   const { id } = req.params;
   card
     .findByIdAndDelete(id)
-    .then((card) => {
-      res.send(card);
+    .then(() => {
+      res.send({ message: "Пост удалён" });
     })
     .catch((error) => errorsHandler(error, res));
 };
