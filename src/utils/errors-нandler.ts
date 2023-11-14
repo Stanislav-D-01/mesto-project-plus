@@ -1,13 +1,13 @@
 import { Response } from "express";
 import * as errors from "./variables";
 
-export const errorsHandler = (error: TypeError, res: Response) => {
+export const errorsAndler = (error: TypeError, res: Response) => {
   if (error.name === "ValidationError") {
     return res
       .status(errors.ERROR_CODE_ERR_DATA_REQ)
       .send({ message: errors.ERROR_CODE_ERR_DATA_REQ_TEXT });
   }
-  if (error.name === "CastError") {
+  if (error.name === "CastError" || error.message === "Not found") {
     return res
       .status(errors.ERROR_CODE_NOT_FOUND)
       .send({ message: errors.ERROR_CODE_NOT_FOUND_TEXT });

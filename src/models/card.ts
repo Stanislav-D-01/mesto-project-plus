@@ -32,7 +32,7 @@ const cardSchema = new mongoose.Schema<ICard>({
   ],
   createAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
 });
 

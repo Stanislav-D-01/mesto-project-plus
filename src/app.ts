@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import routerUsers from "./routes/users";
 import routerCards from "./routes/cards";
+import handlingUnknownRouts from "./middlewares/handling-unknown-routs";
 
 dotenv.config();
 
@@ -19,10 +20,13 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   req.body.user = {
     _id: "6550ad44484618fbd9de9bbe",
   };
+
   next();
 });
+
 app.use("/", routerUsers);
 app.use("/", routerCards);
+app.use(handlingUnknownRouts);
 app.listen(PORT, () => {
   console.log(`Сервер запущен порт:${PORT}`);
 });
