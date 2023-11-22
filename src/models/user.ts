@@ -26,6 +26,7 @@ const userSchema = new mongoose.Schema<Iuser>({
     type: String,
     default:
       "https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png",
+    validate: (v: string) => validator.isURL(v),
   },
   email: {
     type: String,

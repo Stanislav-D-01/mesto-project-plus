@@ -11,6 +11,7 @@ export default (req: RequestSession, res: Response, next: NextFunction) => {
 
   if (!authorization || !authorization.startsWith("Bearer ")) {
     next(new Unauthorized("Необходима авторизация"));
+    return;
   }
   const token = authorization && authorization.replace("Bearer ", "");
   let payload;
@@ -19,7 +20,8 @@ export default (req: RequestSession, res: Response, next: NextFunction) => {
     payload = token && jwt.verify(token, "keysecret");
   } catch (err) {
     next(new Unauthorized("Необходима авторизация"));
+    return;
   }
-  req.user = payload;
+  req.body.user = payload;
   next();
 };

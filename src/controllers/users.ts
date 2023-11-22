@@ -5,17 +5,9 @@ import bcrypt from "bcrypt";
 
 import IRequestSession from "../types/request-type";
 import NotFoundError from "../errors/not-found-error";
-import BadRequestError from "../errors/bad-request";
-import ConflictError from "../errors/conflict-error";
 
 export const createUser = (req: Request, res: Response, next: NextFunction) => {
   const { name, about, avatar, email, password } = req.body;
-
-  user.findOne({ email: email }).then((user) => {
-    if (user) {
-      next(new ConflictError("Пользователь с таким емэйл уже существует"));
-    }
-  });
 
   return bcrypt
     .hash(password, 10)
@@ -29,7 +21,7 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
       }),
     )
 
-    .catch(() => next(new BadRequestError("Ошибка в создании пользователя")));
+    .catch((error) => next(error));
 };
 
 export const getAllUsers = (
@@ -52,7 +44,7 @@ export const getAllUsers = (
       ),
     )
 
-    .catch(() => next(new Error("Ошибка в запросе")));
+    .catch((error) => next(error));
 };
 
 export const getUserFromId = (

@@ -1,5 +1,6 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import NotFoundError from "../errors/not-found-error";
 
-export default (req: Request, res: Response) => {
-  res.status(404).send({ message: "Страница не найдена" });
+export default (req: Request, res: Response, next: NextFunction) => {
+  next(new NotFoundError("Страница не найдена"));
 };

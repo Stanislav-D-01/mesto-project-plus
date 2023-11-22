@@ -1,10 +1,9 @@
 import { Error } from "mongoose";
 
-class Forbidden extends Error {
+export default class Forbidden extends Error {
   statusCode: number;
   constructor(message: string) {
     super(message);
-    this.statusCode = 401;
+    this.statusCode = 403;
   }
 }
-module.exports = Forbidden;

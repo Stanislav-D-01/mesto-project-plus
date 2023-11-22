@@ -6,31 +6,15 @@ import {
   updateAvatar,
   updateProfile,
 } from "../controllers/users";
-import { celebrate, Joi } from "celebrate";
+
+import { getUserFromIdValid, updateProfileValid } from "./validation";
 
 const routerUsers = Router();
 
-routerUsers.get("/users", getAllUsers);
-routerUsers.get("/users/me", getCurrentUser);
-routerUsers.get("/users/:id", getUserFromId);
+routerUsers.get("/", getAllUsers);
+routerUsers.get("/me", getCurrentUser);
+routerUsers.get("/:id", getUserFromIdValid, getUserFromId);
 
-routerUsers.patch(
-  "/users/me",
-  celebrate({
-    body: Joi.object().keys({
-      name: Joi.string().required().min(2).max(30),
-      about: Joi.string().required().min(2).max(300),
-    }),
-  }),
-  updateProfile,
-);
-routerUsers.patch(
-  "/users/me/avatar",
-  celebrate({
-    body: Joi.object().keys({
-      avatar: Joi.string().required(),
-    }),
-  }),
-  updateAvatar,
-);
+routerUsers.patch("/me", updateProfileValid, updateProfile);
+routerUsers.patch("/me/avatar", updateProfileValid, updateAvatar);
 export default routerUsers;

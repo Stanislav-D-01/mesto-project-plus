@@ -4,7 +4,7 @@ import card from "../models/card";
 import IRequestSession from "../types/request-type";
 import BadRequestError from "../errors/bad-request";
 import NotFoundError from "../errors/not-found-error";
-import Unauthorized from "../errors/unauthorized";
+import Forbidden from "../errors/forbidden";
 
 export const getAllCards = (
   req: Request,
@@ -49,7 +49,7 @@ export const deleteCard = (
         if (cardFind && cardFind.owner == idUser) {
           cardFind.deleteOne().then(() => res.send({ message: "Пост удален" }));
         } else {
-          return Promise.reject(new Unauthorized("Недостаточно прав"));
+          return Promise.reject(new Forbidden("Недостаточно прав"));
         }
       })
       .catch((error) => next(error));

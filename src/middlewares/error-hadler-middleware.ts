@@ -2,6 +2,7 @@ import { Response, Request, NextFunction } from "express";
 
 interface IError extends Error {
   statusCode: number;
+  code?: number;
 }
 
 export default (
@@ -11,6 +12,18 @@ export default (
   next: NextFunction,
 ) => {
   const { statusCode = 500, message } = error;
+  if (error.code === 11000) {
+    res.status(409).send({
+      message: "Ошибка в создании записи в БД (возможен дубликат)",
+    });
+    return;
+  }
+  if (!error.statusCode) {
+    res.status(500).send({
+      message: "На сервере произошла ошибка",
+    });
+    return;
+  }
   res.status(error.statusCode).send({
     message: statusCode === 500 ? "На сервере произошла ошибка" : message,
   });

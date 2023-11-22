@@ -6,23 +6,15 @@ import {
   delLikeCard,
   getAllCards,
 } from "../controllers/cards";
-import { celebrate, Joi } from "celebrate";
+
+import { createCardValid, deleteCardValid, likeValid } from "./validation";
 
 const routerCards = Router();
 
-routerCards.post(
-  "/cards",
-  celebrate({
-    body: Joi.object().keys({
-      name: Joi.string().required().min(2).max(30),
-      link: Joi.string().required(),
-    }),
-  }),
-  createCard,
-);
-routerCards.delete("/cards/:id", deleteCard);
-routerCards.get("/cards", getAllCards);
-routerCards.put("/cards/:cardsId/likes", addLikeCard);
-routerCards.delete("/cards/:cardsId/likes", delLikeCard);
+routerCards.post("/", createCardValid, createCard);
+routerCards.delete("/:id", deleteCardValid, deleteCard);
+routerCards.get("/", getAllCards);
+routerCards.put("/:cardsId/likes", likeValid, addLikeCard);
+routerCards.delete("/:cardsId/likes", likeValid, delLikeCard);
 
 export default routerCards;
