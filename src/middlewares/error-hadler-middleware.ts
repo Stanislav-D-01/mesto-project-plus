@@ -18,12 +18,7 @@ export default (
     });
     return;
   }
-  if (!error.statusCode) {
-    res.status(500).send({
-      message: "На сервере произошла ошибка",
-    });
-    return;
-  }
+
   res.status(error.statusCode).send({
     message: statusCode === 500 ? "На сервере произошла ошибка" : message,
   });

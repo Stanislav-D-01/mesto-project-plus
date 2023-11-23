@@ -7,7 +7,11 @@ import {
   updateProfile,
 } from "../controllers/users";
 
-import { getUserFromIdValid, updateProfileValid } from "./validation";
+import {
+  getUserFromIdValid,
+  updateAvatarValid,
+  updateProfileValid,
+} from "./validation";
 
 const routerUsers = Router();
 
@@ -16,5 +20,5 @@ routerUsers.get("/me", getCurrentUser);
 routerUsers.get("/:id", getUserFromIdValid, getUserFromId);
 
 routerUsers.patch("/me", updateProfileValid, updateProfile);
-routerUsers.patch("/me/avatar", updateProfileValid, updateAvatar);
+routerUsers.patch("/me/avatar", updateAvatarValid, updateAvatar);
 export default routerUsers;

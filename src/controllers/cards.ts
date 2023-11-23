@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import card from "../models/card";
 
 import IRequestSession from "../types/request-type";
-import BadRequestError from "../errors/bad-request";
 import NotFoundError from "../errors/not-found-error";
 import Forbidden from "../errors/forbidden";
 
@@ -14,7 +13,7 @@ export const getAllCards = (
   card
     .find({})
     .then((cards) => res.send(cards))
-    .catch(() => next(new BadRequestError("Ошибка запроса")));
+    .catch((error) => next(error));
 };
 
 export const createCard = (
@@ -29,7 +28,7 @@ export const createCard = (
     card
       .create({ name, link, owner })
       .then((card) => res.send(card))
-      .catch(() => next(new BadRequestError("Некорректный запрос")));
+      .catch((error) => next(error));
   }
 };
 
@@ -47,7 +46,9 @@ export const deleteCard = (
       .orFail(() => new NotFoundError("Не найдено"))
       .then((cardFind) => {
         if (cardFind && cardFind.owner == idUser) {
-          cardFind.deleteOne().then(() => res.send({ message: "Пост удален" }));
+          return cardFind
+            .deleteOne()
+            .then(() => res.send({ message: "Пост удален" }));
         } else {
           return Promise.reject(new Forbidden("Недостаточно прав"));
         }
